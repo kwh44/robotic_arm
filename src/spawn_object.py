@@ -3,17 +3,14 @@
 import os
 import sys
 import rclpy
+from multiprocessing import Process
 from ament_index_python.packages import get_package_share_directory
 from gazebo_msgs.srv import SpawnEntity
 
-def main():
-    """ Main for spwaning turtlebot node """
-    # Get input arguments from user
-    
-
-    # Start node
+def spawn_object(model):
+    rclpy.init()
     node = rclpy.create_node("entity_spawner")
-
+    
     node.get_logger().info(
         'Creating Service client to connect to `/spawn_entity`')
     client = node.create_client(SpawnEntity, "/spawn_entity")
@@ -23,20 +20,11 @@ def main():
         client.wait_for_service()
         node.get_logger().info("...connected!")
 
-    # Get path to the turtlebot3 burgerbot
-    beer = ["~/robotic_arm/models/beer/model.sdf", "beer"]
-    coke = ["~/robotic_arm/models/coke_can/model.sdf", "coke_can"]
-
-    for sdf_file in [beer, coke]
-        # Set data for request
-        request = SpawnEntity.Request()
-        request.name = sdf_file[0]
-        request.xml = open(sdf_file[1], 'r').read()
-        request.robot_namespace = "spawned_object"
-        request.initial_pose.position.x = 0. #float(argv[2])
-        request.initial_pose.position.y = 0. #float(argv[3])
-        request.initial_pose.position.z = 0. #float(argv[4])
-
+    request = SpawnEntity.Request()
+    request.name = model[0]
+    request.xml = open(model[1], 'r').read()
+    request.robot_namespace = "spawned_object"
+    request.initial_pose.position.x, request.initial_pose.position.y, request.initial_pose.position.z = model[2]
     node.get_logger().info("Sending service request to `/spawn_entity`")
     future = client.call_async(request)
     rclpy.spin_until_future_complete(node, future)
@@ -51,5 +39,22 @@ def main():
     rclpy.shutdown()
 
 
-if __name__ == "__main__":
+def main():
+
+    beer = ["beer", "~/robotic_arm/models/beer/model.sdf", "beer", (10., 10., 0.)]
+    coke = ["coke_can", "~/robotic_arm/models/coke_can/model.sdf", (5., 5., 0.)]
+    
+    processes = []
+    
+    processes.append(Process(target=spawn_object, args=(beer, )))
+    processes.append(Process(target=spawn_object, args=(coke, )))
+    
+    for process in processes:
+        process.start()
+
+    for process in processes:
+        process.join()
+
+
+if __name__ == '__main__':
     main()
