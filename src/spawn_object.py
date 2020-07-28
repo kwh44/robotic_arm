@@ -41,7 +41,7 @@ def spawn_object(model):
 
 def main():
 
-    beer = ["beer", "/root/robotic_arm/models/beer/model.sdf", "beer", (10., 10., 0.)]
+    beer = ["beer", "/root/robotic_arm/models/beer/model.sdf", (10., 10., 0.)]
     coke = ["coke_can", "/root/robotic_arm/models/coke_can/model.sdf", (5., 5., 0.)]
     
     processes = []
