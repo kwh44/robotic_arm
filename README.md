@@ -5,7 +5,6 @@
 
 - git clone https://github.com/kwh44/robotic_arm
 - cd robotic_arm/docker
-- chmod +x build.bash run.bash
 - ./build.bash
 - ./run.bash
 - exit # close xterm ;=)
@@ -22,6 +21,7 @@
 
 ##### Open new terminal session (Arm control & Object spawn)
 - ./run.bash
+- exit # close xterm ;=)
 
 ###### Inside docker container
 - cd ~/ros2_mara_ws
