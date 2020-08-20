@@ -43,7 +43,7 @@ def main():
 
     beer = ["beer", "/root/robotic_arm/models/beer/model.sdf", (10., 10., 0.)]
     coke = ["coke_can", "/root/robotic_arm/models/coke_can/model.sdf", (5., 5., 0.)]
-    mara = ["mara", "/root/robotic_arm/models/mara/model.sdf", (0., 0., 0.)]
+    mara = ["mara", "/root/robotic_arm/models/mara/mara_robot_gripper_140_camera_train.urdf", (0., 0., 0.)]
 
     processes = []
     
