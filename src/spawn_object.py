@@ -43,13 +43,13 @@ def main():
 
     beer = ["beer", "/root/robotic_arm/models/beer/model.sdf", (10., 10., 0.)]
     coke = ["coke_can", "/root/robotic_arm/models/coke_can/model.sdf", (5., 5., 0.)]
-    camera = ["camera", "/root/robotic_arm/models/camera/model.sdf", (-0.011884, -0.170463, 0.709995)]
+    mara = ["mara", "/root/robotic_arm/models/mara/model.sdf", (0., 0., 0.)]
 
     processes = []
     
     processes.append(Process(target=spawn_object, args=(beer, )))
     processes.append(Process(target=spawn_object, args=(coke, )))
-    processes.append(Process(target=spawn_object, args=(camera, )))
+    processes.append(Process(target=spawn_object, args=(mara, )))
 
     for process in processes:
         process.start()
