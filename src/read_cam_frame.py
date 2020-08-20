@@ -16,6 +16,7 @@ class CameraRead(Node):
     def msg_callback(self, m):
         print("received image stamp {}".format(m.header.frame_id))
         np_img = np.reshape(m.data, (m.height, m.width, 3)).astype(np.uint8)
+        np_img = cv2.cvtColor(np_img, cv2.COLOR_BGR2RGB)
         cv2.imshow(self.__window_name, np_img)
         cv2.waitKey(1)
         #
