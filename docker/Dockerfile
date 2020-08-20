@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
 	ros-$ROS_DISTRO-gazebo-ros-pkgs
 
 RUN apt-get install -y \
-	python3-pip python3-vcstool python3-numpy wget python3-pyqt5 python3-colcon-common-extensions git
+	python3-pip python3-vcstool python3-numpy wget python3-pyqt5 python3-colcon-common-extensions git python3-opencv
 
 
 RUN mkdir -p ~/ros2_mara_ws/src && cd ~/ros2_mara_ws  && \    
