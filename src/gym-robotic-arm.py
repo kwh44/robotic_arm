@@ -70,7 +70,7 @@ class RoboticArm(gym.Env):
     def __publish_arm_cmds(self, action):
         # set joint angle
         for i in range(6):
-            self.arm_cmd_msgs[i].position = action[i] * 3.1416/180
+            self.arm_cmd_msgs[i].position = action[i] * 3.1416 / 180
             # publish three times to the joint angle topic
             for i in range(3):
                 self.arm_cmd_nodes_pubs[i][1].publish(self.arm_cmd_msgs[i])
@@ -78,8 +78,14 @@ class RoboticArm(gym.Env):
         self.arm_cmd_msgs[-1].goal_angularposition = action[6]
         while not self.arm_cmd_nodes_pubs[-1][1].wait_for_service(timeout_sec=1.0):
             continue
-        gripper_future = self.arm_cmd_nodes_pubs[-1][1].call_async(self.arm_cmd_msgs[-1])
-        rclpy.spin_until_future_completes(self.arm_cmd_nodes_pubs[-1][0], gripper_future)
+        goal_accepted = False
+        while not goal_accepted:
+            gripper_future = self.arm_cmd_nodes_pubs[-1][1].call_async(self.arm_cmd_msgs[-1])
+            rclpy.spin_until_future_completes(self.arm_cmd_nodes_pubs[-1][0], gripper_future)
+            if gripper_future.result() is not None:
+                if gripper_future.result().goal_accepted:
+                    goal_accepted = True
+
 
     def __msg_callback(self, m):
         np_img = np.reshape(m.data, (m.height, m.width, 3)).astype(np.uint8)
