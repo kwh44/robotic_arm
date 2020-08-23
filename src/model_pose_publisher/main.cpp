@@ -24,8 +24,9 @@
 namespace gazebo {
 
     class ModelPose : public ModelPlugin {
+
+    private:
         physics::ModelPtr model;
-    public:
         rclcpp::Publisher<gazebo::msgs::Pose>::SharedPtr publisher;
         rclcpp::Node ros_node;
         rclcpp::TimerBase::SharedPtr timer;
@@ -36,7 +37,7 @@ namespace gazebo {
             int argc = 0;
             char **argv = NULL;
             rclcpp::init(argc, argv);
-            ros_node = rclcpp::Node("pose_ros_publisher");
+            ros_node.reset(new rclcpp::Node("pose_ros_publisher"));
             publisher = ros_node.create_publisher<gazebo::msgs::Pose>("/beer_model_pose", 10);
             timer = create_wall_timer(
                     500ms, std::bind(&ModelPose::timer_callback, this));
