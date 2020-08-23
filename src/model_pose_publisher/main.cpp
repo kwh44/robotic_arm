@@ -31,10 +31,8 @@ namespace gazebo {
 
         void OnUpdate() {
             auto pose = this->model->WorldPose();
-            ignition::math::Vector3d v(0, 0, 0);
-            v = pose.Pos();
             gazebo::msgs::Pose msg;
-            gazebo::msgs::Set(&msg, ignition::math::Vector3d(v[0], v[1], v[2]));
+            gazebo::msgs::Set(&msg, pose);
             model_pose_pub_.Publish(msg);
         }
 
