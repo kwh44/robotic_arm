@@ -25,7 +25,7 @@ namespace gazebo {
             std::bind(&ModelPose::OnUpdate, this);
             node_handle_ = transport::NodePtr(new transport::Node());
             node_handle_->Init("mara2");
-            model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model->GetName() + "model_pose");
+            model_pose_pub_ = node_handle_->Advertise<Vector3d>("~/" + model->GetName() + "model_pose");
 
         }
 
