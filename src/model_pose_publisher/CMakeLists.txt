@@ -4,11 +4,11 @@ project(model_pose CXX)
 
 find_package(gazebo REQUIRED)
 
-find_package(roscpp REQUIRED)
+find_package(rclcpp REQUIRED)
 
 find_package(std_msgs REQUIRED)
 
-include_directories(${roscpp_INCLUDE_DIRS})
+include_directories(${rclcpp_INCLUDE_DIRS})
 
 include_directories(${std_msgs_INCLUDE_DIRS})
 
