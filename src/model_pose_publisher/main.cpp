@@ -16,22 +16,24 @@ namespace gazebo {
     class ModelPose : public ModelPlugin {
 
         physics::ModelPtr model;
+        transport::PublisherPtr model_pose_pub_;
+        transport::NodePtr node_handle_;
 
     public:
         void Load(physics::ModelPtr _parent, sdf::ElementPtr /*_sdf*/) {
-
-            this->model = _parent;
+            model = _parent;
             std::bind(&ModelPose::OnUpdate, this);
-            auto node_handle_ = transport::NodePtr(new transport::Node());
+            node_handle_ = transport::NodePtr(new transport::Node());
             node_handle_->Init("mara");
-            auto model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model->GetName() + "model_pose", 1);
-            gazebo::msgs::Vector3d msg;
+            model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model->GetName() + "model_pose", 1);
+
         }
 
         void OnUpdate() {
             auto pose = this->model->GetWorldPose();
             ignition::math::Vector3d v(0, 0, 0);
             v = pose.pos;
+            gazebo::msgs::Vector3d msg;
             gazebo::msgs::Set(&msg, v);
             model_pose_pub_.publish(msg);
         }
