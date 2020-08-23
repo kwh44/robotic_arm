@@ -33,7 +33,7 @@ namespace gazebo {
             auto pose = this->model->WorldPose();
             gazebo::msgs::Pose msg;
             gazebo::msgs::Set(&msg, pose);
-            model_pose_pub->Publish(msg);
+            model_pose_pub_->Publish(msg);
         }
 
     };
