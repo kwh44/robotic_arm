@@ -21,7 +21,7 @@ namespace gazebo {
         void Load(physics::ModelPtr _parent, sdf::ElementPtr /*_sdf*/) {
 
             this->model = _parent;
-            std::bind(&ModelPose::OnUpdate, this));
+            std::bind(&ModelPose::OnUpdate, this);
             auto node_handle_ = transport::NodePtr(new transport::Node());
             node_handle_->Init("mara");
             auto model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model_->GetName() + "model_pose", 1);
@@ -29,7 +29,7 @@ namespace gazebo {
         }
 
         auto GetPose() {
-            auto pose this->model->GetWorldPose();
+            auto pose = this->model->GetWorldPose();
             ignition::math::Vector3 v(0, 0, 0);
             v = pose.pos;
             return v;
@@ -41,7 +41,11 @@ namespace gazebo {
         }
 
         void OnUpdate() {
-            Publish(GetPose());
+            auto pose = this->model->GetWorldPose();
+            ignition::math::Vector3 v(0, 0, 0);
+            v = pose.pos;
+            gazebo::msgs::Set(&msg, v);
+            model_pose_pub_.publish(msg);
         }
 
     };
