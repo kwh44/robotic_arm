@@ -9,7 +9,6 @@
 #include <gazebo/common/common.hh>
 #include <gazebo/common/Plugin.hh>
 
-
 #include "gazebo/transport/transport.hh"
 #include "gazebo/msgs/msgs.hh"
 
@@ -22,10 +21,10 @@ namespace gazebo {
         void Load(physics::ModelPtr _parent, sdf::ElementPtr /*_sdf*/) {
 
             this->model = _parent;
-            std::bind(&ModelPush::OnUpdate, this));
-            node_handle_ = transport::NodePtr(new transport::Node());
-            node_handle_->Init(namespace_);
-            model_pose_pub_ = node_handle_->Advertise<std_msgs::msgs::Float64MultiArray>("~/" + model_->GetName() + "model_pose", 1);
+            std::bind(&ModelPose::OnUpdate, this));
+            auto node_handle_ = transport::NodePtr(new transport::Node());
+            node_handle_->Init("mara");
+            auto model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model_->GetName() + "model_pose", 1);
             std_msgs::msgs::Float64MultiArray msg;
         }
 
