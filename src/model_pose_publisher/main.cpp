@@ -28,18 +28,6 @@ namespace gazebo {
             gazebo::msgs::Vector3d msg;
         }
 
-        auto GetPose() {
-            auto pose = this->model->GetWorldPose();
-            ignition::math::Vector3 v(0, 0, 0);
-            v = pose.pos;
-            return v;
-        }
-
-        void Publish(ignition::math::Vector3 pose) {
-            msg.set_data(pose);
-            model_pose_pub_.publish(msg);
-        }
-
         void OnUpdate() {
             auto pose = this->model->GetWorldPose();
             ignition::math::Vector3 v(0, 0, 0);
