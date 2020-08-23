@@ -25,28 +25,27 @@ namespace gazebo {
             auto node_handle_ = transport::NodePtr(new transport::Node());
             node_handle_->Init("mara");
             auto model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model_->GetName() + "model_pose", 1);
-            std_msgs::msgs::Float64MultiArray msg;
+            gazebo::msgs::Vector3d msg;
         }
 
         auto GetPose() {
-            auto pose
-            this->model->GetWorldPose();
+            auto pose this->model->GetWorldPose();
             ignition::math::Vector3 v(0, 0, 0);
             v = pose.pos;
-            return std::vector < double > {v.x, v.y, v.z};
+            return v;
         }
 
-        void Publish(std::vector<double> lst) {
-            msg.set_data(lst.data());
+        void Publish(ignition::math::Vector3 pose) {
+            msg.set_data(pose);
             model_pose_pub_.publish(msg);
         }
 
         void OnUpdate() {
-            Publish(GetPose())
+            Publish(GetPose());
         }
 
     };
 
     // Register this plugin with the simulator
-    GZ_REGISTER_MODEL_PLUGIN(ModelPush)
+    GZ_REGISTER_MODEL_PLUGIN(ModelPose)
 }
