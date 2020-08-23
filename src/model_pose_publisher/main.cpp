@@ -24,7 +24,7 @@ namespace gazebo {
             model = _parent;
             std::bind(&ModelPose::OnUpdate, this);
             node_handle_ = transport::NodePtr(new transport::Node());
-            node_handle_->Init("mara");
+            node_handle_->Init("mara2");
             model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model->GetName() + "model_pose", 1);
 
         }
@@ -34,7 +34,7 @@ namespace gazebo {
             ignition::math::Vector3d v(0, 0, 0);
             v = pose.Pos();
             gazebo::msgs::Vector3d msg;
-            gazebo::msgs::Set(&msg, ignition::math::Vector3d(v[0], v[1], v[2]));
+            gazebo::msgs::Set(&msg, ignition::math::Vector3(v[0], v[1], v[2]));
             model_pose_pub_.Publish(msg);
         }
 
