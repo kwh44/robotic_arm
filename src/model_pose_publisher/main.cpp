@@ -24,13 +24,13 @@ namespace gazebo {
             std::bind(&ModelPose::OnUpdate, this);
             auto node_handle_ = transport::NodePtr(new transport::Node());
             node_handle_->Init("mara");
-            auto model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model_->GetName() + "model_pose", 1);
+            auto model_pose_pub_ = node_handle_->Advertise<ConstVector3dPtr>("~/" + model->GetName() + "model_pose", 1);
             gazebo::msgs::Vector3d msg;
         }
 
         void OnUpdate() {
             auto pose = this->model->GetWorldPose();
-            ignition::math::Vector3 v(0, 0, 0);
+            ignition::math::Vector3d v(0, 0, 0);
             v = pose.pos;
             gazebo::msgs::Set(&msg, v);
             model_pose_pub_.publish(msg);
