@@ -19,14 +19,14 @@
 #include <string>
 
 #include <rclcpp/rclcpp.hpp>
-#include <std_msgs/Float64MultiArray.h>"
+#include <std_msgs/Float64MultiArray.h>
 
 
 namespace gazebo {
 
     class ModelPose : public ModelPlugin {
         physics::ModelPtr model;
-        rclcpp::Publisher<std_msgs::Float64MultiArray>::SharedPtr publisher;
+        rclcpp::Publisher<gazebo::msgs::Pose>::SharedPtr publisher;
         rclcpp::Node ros_node;
         rclcpp::TimerBase::SharedPtr timer;
     public:
@@ -34,22 +34,17 @@ namespace gazebo {
         void Load(physics::ModelPtr _parent, sdf::ElementPtr /*_sdf*/) {
             model = _parent;
             ros_node = rclcpp::Node("pose_ros_publisher");
-            publisher = ros_node.create_publisher<std_msgs::Float64MultiArray>("/beer_model_pose", 10);
+            publisher = ros_node.create_publisher<gazebo::msgs::Pose>("/beer_model_pose", 10);
             timer = create_wall_timer(
                     500ms, std::bind(&ModelPose::timer_callback, this));
 
         }
 
         void timer_callback() {
-            std_msgs::Float64MultiArray message;
-            message.resize(3);
             auto pose = this->model->WorldPose();
-            ignition::math::Vector3 v(0, 0, 0);
-            v = pose.Pos();
-            double vec[3];
-            for (size_t i = 0; i < 3; ++i) vec[i] = v[i];
-            message.data = vec;
-            publisher->publish(message);
+            gazebo::msgs::Pose msg;
+            gazebo::msgs::Set(&msg, pose);
+            publisher->publish(msg);
         }
     };
 
