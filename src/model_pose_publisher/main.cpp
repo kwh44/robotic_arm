@@ -19,6 +19,9 @@
 #include <string>
 
 #include <rclcpp/rclcpp.hpp>
+#include "std_msgs/msg/string.hpp"
+
+
 /*
 
 namespace gazebo {
@@ -101,7 +104,7 @@ namespace gazebo {
             pub_ = rosnode_->advertise<std_msgs::String>("/beer/model_pose", 1);
             std_msgs::String msg;
             msg.data = "0.4404040404 0.2342345 0.234532245433243";
-            this->pub_Queue->push(msg, pub_);
+            pub_Queue->push(msg, pub_);
         }
     };
 
