@@ -84,23 +84,17 @@ namespace gazebo {
 */
 namespace gazebo {
     class ModelPose : public ModelPlugin {
-    private:
         rclcpp::NodeHandle *rosnode_;
-    private:
         rclcpp::Publisher pub_;
-    private:
         rclcpp::PubQueue<std_msgs::String>::Ptr pub_Queue;
-    private:
         rclcpp::PubMultiQueue pmq;
-
     public:
-        virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
+        void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
             if (!rclcpp::isInitialized()) {
                 int argc = 0;
                 char **argv = NULL;
                 rclcpp::init(argc, argv, "TestSpace", ros::init_options::NoSigintHandler);
             }
-
             this->rosnode_ = new rclcpp::NodeHandle("TestSpace");
             this->pmq.startServiceThread();
             this->pub_Queue = this->pmq.addPub<std_msgs::String>();
