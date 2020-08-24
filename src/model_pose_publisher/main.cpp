@@ -82,31 +82,35 @@ namespace gazebo {
     GZ_REGISTER_MODEL_PLUGIN(ModelPose)
 }
 */
-class ModelPose : public ModelPlugin
-{
-private: rclcpp::NodeHandle* rosnode_;
-private: rclcpp::Publisher pub_;
-private: rclcpp::PubQueue<std_msgs::String>::Ptr pub_Queue;
-private: rclcpp::PubMultiQueue pmq;
+namespace gazebo {
+    class ModelPose : public ModelPlugin {
+    private:
+        rclcpp::NodeHandle *rosnode_;
+    private:
+        rclcpp::Publisher pub_;
+    private:
+        rclcpp::PubQueue<std_msgs::String>::Ptr pub_Queue;
+    private:
+        rclcpp::PubMultiQueue pmq;
 
-public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
-    {
-        if (!rclcpp::isInitialized())
-        {
-            int argc = 0;
-            char **argv = NULL;
-            rclcpp::init(argc, argv, "TestSpace", ros::init_options::NoSigintHandler);
+    public:
+        virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
+            if (!rclcpp::isInitialized()) {
+                int argc = 0;
+                char **argv = NULL;
+                rclcpp::init(argc, argv, "TestSpace", ros::init_options::NoSigintHandler);
+            }
+
+            this->rosnode_ = new rclcpp::NodeHandle("TestSpace");
+            this->pmq.startServiceThread();
+            this->pub_Queue = this->pmq.addPub<std_msgs::String>();
+            this->pub_ = this->rosnode_->advertise<std_msgs::String>("/beer/model_pose", 100);
+
+            std_msgs::String msg;
+            msg.data = "0.4404040404 0.2342345 0.234532245433243";
+            this->pub_Queue->push(msg, this->pub_);
         }
+    };
 
-        this->rosnode_ = new rclcpp::NodeHandle("TestSpace");
-        this->pmq.startServiceThread();
-        this->pub_Queue = this->pmq.addPub<std_msgs::String>();
-        this->pub_ = this->rosnode_->advertise<std_msgs::String>("/beer/model_pose", 100);
-
-        std_msgs::String msg;
-        msg.data = "0.4404040404 0.2342345 0.234532245433243";
-        this->pub_Queue->push(msg, this->pub_);
-    }
-};
-
-GZ_REGISTER_MODEL_PLUGIN(VelodynePlugin);
+    GZ_REGISTER_MODEL_PLUGIN(VelodynePlugin);
+}
