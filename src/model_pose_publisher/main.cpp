@@ -89,8 +89,8 @@ namespace gazebo {
     class ModelPose : public ModelPlugin {
         rclcpp::Node *rosnode_;
         rclcpp::Publisher<std_msgs::msg::String> pub_;
-        rclcpp::PubQueue<std_msgs::msg::String>::Ptr pub_Queue;
-        rclcpp::PubMultiQueue pmq;
+        PubQueue<std_msgs::msg::String>::Ptr pub_Queue;
+        PubMultiQueue pmq;
     public:
         void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
             if (!rclcpp::isInitialized()) {
