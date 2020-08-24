@@ -88,8 +88,8 @@ namespace gazebo {
 namespace gazebo {
     class ModelPose : public ModelPlugin {
         rclcpp::Node *rosnode_;
-        rclcpp::Publisher<std_msgs::String> pub_;
-        rclcpp::PubQueue<std_msgs::String>::Ptr pub_Queue;
+        rclcpp::Publisher<std_msgs::msg::String> pub_;
+        rclcpp::PubQueue<std_msgs::msg::String>::Ptr pub_Queue;
         rclcpp::PubMultiQueue pmq;
     public:
         void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) {
@@ -100,9 +100,9 @@ namespace gazebo {
             }
             rosnode_ = new rclcpp::Node("TestSpace");
             pmq.startServiceThread();
-            pub_Queue = pmq.addPub<std_msgs::String>();
-            pub_ = rosnode_->advertise<std_msgs::String>("/beer/model_pose", 1);
-            std_msgs::String msg;
+            pub_Queue = pmq.addPub<std_msgs::msg::String>();
+            pub_ = rosnode_->advertise<std_msgs::msg::String>("/beer/model_pose", 1);
+            std_msgs::msg::String msg;
             msg.data = "0.4404040404 0.2342345 0.234532245433243";
             pub_Queue->push(msg, pub_);
         }
