@@ -95,16 +95,15 @@ namespace gazebo {
                 char **argv = NULL;
                 rclcpp::init(argc, argv, "TestSpace", ros::init_options::NoSigintHandler);
             }
-            this->rosnode_ = new rclcpp::NodeHandle("TestSpace");
-            this->pmq.startServiceThread();
-            this->pub_Queue = this->pmq.addPub<std_msgs::String>();
-            this->pub_ = this->rosnode_->advertise<std_msgs::String>("/beer/model_pose", 100);
-
+            rosnode_ = new rclcpp::NodeHandle("TestSpace");
+            pmq.startServiceThread();
+            pub_Queue = pmq.addPub<std_msgs::String>();
+            pub_ = rosnode_->advertise<std_msgs::String>("/beer/model_pose", 1);
             std_msgs::String msg;
             msg.data = "0.4404040404 0.2342345 0.234532245433243";
-            this->pub_Queue->push(msg, this->pub_);
+            this->pub_Queue->push(msg, pub_);
         }
     };
 
-    GZ_REGISTER_MODEL_PLUGIN(VelodynePlugin);
+    GZ_REGISTER_MODEL_PLUGIN(ModelPose);
 }
