@@ -84,8 +84,8 @@ namespace gazebo {
 */
 namespace gazebo {
     class ModelPose : public ModelPlugin {
-        rclcpp::NodeHandle *rosnode_;
-        rclcpp::Publisher pub_;
+        rclcpp::Node *rosnode_;
+        rclcpp::Publisher<std_msgs::String> pub_;
         rclcpp::PubQueue<std_msgs::String>::Ptr pub_Queue;
         rclcpp::PubMultiQueue pmq;
     public:
@@ -95,7 +95,7 @@ namespace gazebo {
                 char **argv = NULL;
                 rclcpp::init(argc, argv, "TestSpace", ros::init_options::NoSigintHandler);
             }
-            rosnode_ = new rclcpp::NodeHandle("TestSpace");
+            rosnode_ = new rclcpp::Node("TestSpace");
             pmq.startServiceThread();
             pub_Queue = pmq.addPub<std_msgs::String>();
             pub_ = rosnode_->advertise<std_msgs::String>("/beer/model_pose", 1);
