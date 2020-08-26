@@ -31,7 +31,7 @@ namespace gazebo_plugins
         gazebo_ros::Node::SharedPtr ros_node_;
 
         /// Joint state publisher.
-        rclcpp::Publisher<geometry_msgs:msg::Point>::SharedPtr entity_state_pub_;
+        rclcpp::Publisher<geometry_msgs::msg::Point>::SharedPtr entity_state_pub_;
 
         /// Period in seconds
         double update_period_;
