@@ -60,11 +60,6 @@ ament_export_dependencies(gazebo_dev)
 ament_export_dependencies(gazebo_msgs)
 ament_export_dependencies(gazebo_ros)
 
-if(BUILD_TESTING)
-    add_subdirectory(test)
-    find_package(ament_lint_auto REQUIRED)
-    ament_lint_auto_find_test_dependencies()
-endif()
 
 if(NOT WIN32)
     if(NOT APPLE)

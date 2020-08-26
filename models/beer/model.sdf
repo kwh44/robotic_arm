@@ -38,5 +38,6 @@
         </material>
       </visual>
     </link>
+    <plugin name="model_pose" filename="libmodel_pose.so"/>
   </model>
 </sdf>
