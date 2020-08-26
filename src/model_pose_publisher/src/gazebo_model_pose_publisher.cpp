@@ -6,12 +6,13 @@
 #include <gazebo/common/Time.hh>
 #include <gazebo/physics/Model.hh>
 #include <gazebo/physics/World.hh>
-#include "gazebo/msgs/msgs.hh"
+
 #include <gazebo_model_pose_publisher.hpp>
 #include <gazebo_ros/conversions/builtin_interfaces.hpp>
 #include <gazebo_ros/node.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <geometry_msgs/point.hpp>
 
 #include <memory>
 #include <string>
@@ -30,7 +31,7 @@ namespace gazebo_plugins
         gazebo_ros::Node::SharedPtr ros_node_;
 
         /// Joint state publisher.
-        rclcpp::Publisher<gazebo::geometry_msgs::msg::Pose>::SharedPtr entity_state_pub_;
+        rclcpp::Publisher<geometry_msgs::Point>::SharedPtr entity_state_pub_;
 
         /// Period in seconds
         double update_period_;
@@ -75,8 +76,7 @@ namespace gazebo_plugins
     void GazeboRosEntityStatePublisherPrivate::OnUpdate(const gazebo::common::UpdateInfo & info)
     {
         auto pose = model->WorldPose();
-        gazebo::msgs::Pose msg;
-        gazebo::msgs::Set(&msg, pose);
+        geometry_msgs::Point msg;
         entity_state_pub_->Publish(msg);
     }
 
