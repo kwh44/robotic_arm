@@ -76,7 +76,7 @@ namespace gazebo_plugins
     void GazeboRosEntityStatePublisherPrivate::OnUpdate(const gazebo::common::UpdateInfo & info)
     {
         auto pose = model->WorldPose();
-        geometry_msgs::Point msg;
+        geometry_msgs::msg::Point msg;
         entity_state_pub_->Publish(msg);
     }
 
