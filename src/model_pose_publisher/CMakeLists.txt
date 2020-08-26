@@ -72,7 +72,6 @@ if(NOT WIN32)
                 "prepend-non-duplicate;DYLD_LIBRARY_PATH;${GAZEBO_PLUGIN_PATH}")
     endif()
 endif()
-ament_environment_hooks("${CMAKE_CURRENT_SOURCE_DIR}/env-hooks/gazebo_plugins.sh.in")
 
 ament_package()
 
