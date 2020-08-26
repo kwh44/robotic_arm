@@ -47,5 +47,11 @@
         </geometry>
       </visual>
     </link>
+    <plugin name="gazebo_model_pose_publisher" filename="libgazebo_model_pose_publisher.so">
+        <ros>
+        <namespace>mara</namespace>
+        <update_rate>100</update_rate>
+        </ros>
+    </plugin>
   </model>
 </sdf>
