@@ -68,7 +68,7 @@ namespace gazebo_plugins
         impl_->last_update_time_ = model->GetWorld()->SimTime();
         // Entity state publisher
         impl_->entity_state_pub_ = impl_->ros_node_->create_publisher<geometry_msgs::msg::Point>(
-                model->GetName() + "_entity_state", rclcpp::Qos::Qos(100));
+                model->GetName() + "_entity_state", rclcpp::Qos(100));
         // Callback on every iteration
         impl_->update_connection_ = gazebo::event::Events::ConnectWorldUpdateBegin(
                 std::bind(&GazeboRosEntityStatePublisherPrivate::OnUpdate, impl_.get(), std::placeholders::_1));
