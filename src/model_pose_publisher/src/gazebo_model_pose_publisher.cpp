@@ -58,11 +58,7 @@ namespace gazebo_plugins
     void GazeboRosEntityStatePublisher::Load(gazebo::physics::ModelPtr model, sdf::ElementPtr sdf)
     {
         impl_->model = model;
-        // ROS node
         impl_->ros_node_ = gazebo_ros::Node::Get(sdf);
-        // Get QoS profiles
-        //const gazebo_ros::QoS & qos = impl_->ros_node_->get_qos();
-        // Update rate
         double update_rate = 100.0;
         impl_->update_period_ = 1.0 / update_rate;
         impl_->last_update_time_ = model->GetWorld()->SimTime();
@@ -77,10 +73,6 @@ namespace gazebo_plugins
     void GazeboRosEntityStatePublisherPrivate::OnUpdate(const gazebo::common::UpdateInfo & info)
     {
         auto pose = model->WorldPose();
-        // x = pose.position.x
-        // y = pose.position y
-        // z = pose.position z
-
         geometry_msgs::msg::Point msg;
         msg.x = pose.Pos()[0];
         msg.y = pose.Pos()[1];

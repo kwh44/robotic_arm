@@ -1,9 +1,11 @@
 import gym
 import rclpy
 import cv2
+import math
 import numpy as np
 from gym import spaces
 from sensor_msgs.msg import Image
+from geometry_msgs.msg import Point
 import rclpy.qos as qos
 from rclpy.qos import qos_profile_sensor_data
 from hrim_actuator_rotaryservo_msgs.msg import GoalRotaryServo
@@ -28,6 +30,10 @@ class RoboticArm(gym.Env):
             shape=(480, 640, 3),
             dtype=np.uint8
         )
+
+        self.target_obj1_pos = np.array([0.5, -0.5, 0.0])
+        self.target_obj2_pos = np.array([-0.5, -0.5, 0.0])
+
         rclpy.init(args=None)
         self.__start_video_feed()
         self.__start_arm_control()
@@ -38,6 +44,7 @@ class RoboticArm(gym.Env):
         """
         # set joints and gripper to default position
         # move coke and beer to start position
+        # TODO
         pass
 
     def step(self, action):
@@ -49,18 +56,37 @@ class RoboticArm(gym.Env):
         self.__publish_arm_cmds(action)
         observation = self.__get_observation()
         # is episode complete
-        done = False
+        done = self.is_episode_over()
         # reward
         # + 10 if beer is on the right side or coke is on left side from the arm
-        #
-        reward = None
-
+        reward = self.reward_function()
         # debugging information
         info = {}
-        pass
+        return observation, reward, done, info
 
     def close(self):
         pass
+
+    def reward_function(self):
+        reward = 0.0
+        obj1_pos, obj2_pos = self.__get_object_pos()
+        reward += self.__distance(obj1_pos, self.target_obj1_pos)
+        reward += self.__distance(obj2_pos, self.target_obj2_pos)
+        return reward
+
+    def is_episode_over(self):
+        dist = 0.1
+        obj1_pos, obj2_pos = self.__get_object_pos()
+        return self.__distance(obj1_pos, self.target_obj1_pos) < dist and self.__distance(obj2_pos, self.target_obj2_pos) < dist
+
+
+    def __distance(self, p1, p2):
+        return np.sqrt(np.sum((p1-p2)**2, axis=0))
+
+    def __get_object_pos(self):
+        rclpy.spin_once(self.object_type_1_node)
+        rclpy.spin_once(self.object_type_2_node)
+        return self.last_object_type_1_pos, self.last_object_type_2_pos
 
     def __get_observation(self):
         # execute camera feed callback
@@ -86,8 +112,7 @@ class RoboticArm(gym.Env):
                 if gripper_future.result().goal_accepted:
                     goal_accepted = True
 
-
-    def __msg_callback(self, m):
+    def __cam_callback(self, m):
         np_img = np.reshape(m.data, (m.height, m.width, 3)).astype(np.uint8)
         np_img = cv2.cvtColor(np_img, cv2.COLOR_BGR2RGB)
         self.last_observation = np_img
@@ -95,7 +120,7 @@ class RoboticArm(gym.Env):
     def __start_video_feed(self):
         self.camera_feed_node = rclpy.create_node("mara_camera_feed_node")
         self._qos = qos.QoSProfile(history=1, depth=1)
-        self.sub = self.camera_feed_node.create_subscription(Image, '/rs_camera/rs_d435/image_raw', self.__msg_callback,
+        self.sub = self.camera_feed_node.create_subscription(Image, '/rs_camera/rs_d435/image_raw', self.__cam_callback,
                                                              qos_profile=self._qos)
 
     def __start_arm_control(self):
@@ -127,3 +152,18 @@ class RoboticArm(gym.Env):
         req.goal_velocity = 99999.
         req.goal_angularposition = 0.0
         self.arm_cmd_msgs.append(req)
+
+    def __object_type_1_callback(self, m):
+        self.last_object_type_1_pos = np.array([m.x, m.y, m.z])
+
+    def __object_type_2_callback(self, m):
+        self.last_object_type_2_pos = np.array([m.x, m.y, m.z])
+
+    def __start_entity_state(self):
+        self.object_type_1_node = rclpy.create_node("mara_object_type_1_node")
+        self.sub_object_type_1 = self.object_type_1_node.create_subscription(Point, '/spawned_object/coke_can_entity_state', self.__object_type_1_callback,
+                                                             qos_profile=self._qos)
+        self.object_type_2_node = rclpy.create_node("mara_object_type_2_node")
+        self.sub_object_type_2 = self.object_type_2_node.create_subscription(Point, '/spawned_object/beer_entity_state', self.__object_type_2_callback,
+                                                             qos_profile=self._qos)
+

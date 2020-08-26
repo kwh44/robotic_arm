@@ -1,1 +1,6 @@
 .idea
+src/model_pose_publisher/.idea
+src/model_pose_publisher/cmake-build-debug
+src/model_pose_publisher/build
+src/model_pose_publisher/install
+src/model_pose_publisher/log

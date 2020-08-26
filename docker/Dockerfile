@@ -19,11 +19,11 @@ RUN apt-get update && apt-get install -y \
 	ros-$ROS_DISTRO-gazebo-ros-pkgs
 
 RUN apt-get install -y \
-	python3-pip python3-vcstool python3-numpy wget python3-pyqt5 python3-colcon-common-extensions git python3-opencv
+	python3-pip python3-vcstool python3-numpy wget python3-pyqt5 python3-colcon-common-extensions git
 
 
 RUN mkdir -p ~/ros2_mara_ws/src && cd ~/ros2_mara_ws  && \    
     wget https://raw.githubusercontent.com/acutronicrobotics/MARA/dashing/mara-ros2.repos && \
     vcs import src < mara-ros2.repos && cd ~/ros2_mara_ws/src/HRIM && \
     pip3 install hrim && hrim generate models/actuator/servo/servo.xml && \
-    hrim generate models/actuator/gripper/gripper.xml
+    hrim generate models/actuator/gripper/gripper.xml 
