@@ -30,7 +30,7 @@ namespace gazebo_plugins
         gazebo_ros::Node::SharedPtr ros_node_;
 
         /// Joint state publisher.
-        rclcpp::Publisher<geometry_msgs::msg::Pose>::SharedPtr entity_state_pub_;
+        rclcpp::Publisher<gazebo::geometry_msgs::msg::Pose>::SharedPtr entity_state_pub_;
 
         /// Period in seconds
         double update_period_;
@@ -44,12 +44,12 @@ namespace gazebo_plugins
         gazebo::physics::ModelPtr model;
     };
 
-    GazeboRosJointStatePublisher::GazeboRosJointStatePublisher()
-            : impl_(std::make_unique<GazeboRosJointStatePublisherPrivate>())
+    GazeboRosEntityStatePublisher::GazeboRosEntityStatePublisher()
+            : impl_(std::make_unique<GazeboRosEntityStatePublisherPrivate>())
     {
     }
 
-    GazeboRosJointStatePublisher::~GazeboRosJointStatePublisher()
+    GazeboRosEntityStatePublisher::~GazeboRosEntityStatePublisher()
     {
     }
 
@@ -65,7 +65,7 @@ namespace gazebo_plugins
         impl_->update_period_ = 1.0 / update_rate;
         impl_->last_update_time_ = model->GetWorld()->SimTime();
         // Entity state publisher
-        impl_->entity_state_pub_ = impl_->ros_node_->create_publisher<gazebo_msgs::msg::Pose>(
+        impl_->entity_state_pub_ = impl_->ros_node_->create_publisher<gazebo::gazebo_msgs::msg::Pose>(
                 "entity_state", qos.get_publisher_qos("entity_state", rclcpp::QoS(1000)));
         // Callback on every iteration
         impl_->update_connection_ = gazebo::event::Events::ConnectWorldUpdateBegin(
