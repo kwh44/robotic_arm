@@ -82,9 +82,9 @@ namespace gazebo_plugins
         // z = pose.position z
 
         geometry_msgs::msg::Point msg;
-        msg.x = pose.Pos().[0];
-        msg.y = pose.Pos().[1];
-        msg.z = pose.Pos().[2];
+        msg.x = pose.Pos()[0];
+        msg.y = pose.Pos()[1];
+        msg.z = pose.Pos()[2];
         entity_state_pub_->publish(msg);
     }
 
