@@ -12,7 +12,7 @@
 #include <gazebo_ros/node.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
-#include <geometry_msgs/point.hpp>
+#include <geometry_msgs/msg/point.hpp>
 
 #include <memory>
 #include <string>
