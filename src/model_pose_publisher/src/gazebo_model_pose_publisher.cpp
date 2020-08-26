@@ -7,7 +7,7 @@
 #include <gazebo/physics/Model.hh>
 #include <gazebo/physics/World.hh>
 #include "gazebo/msgs/msgs.hh"
-#include <gazebo_plugins/gazebo_entity_state_publisher.hpp>
+#include <gazebo_plugins/gazebo_model_pose_publisher.hpp>
 #include <gazebo_ros/conversions/builtin_interfaces.hpp>
 #include <gazebo_ros/node.hpp>
 #include <rclcpp/rclcpp.hpp>
