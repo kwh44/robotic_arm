@@ -83,8 +83,3 @@ install(TARGETS
         ARCHIVE DESTINATION lib
         LIBRARY DESTINATION lib
         RUNTIME DESTINATION bin)
-
-install(DIRECTORY
-        worlds
-        DESTINATION share/${PROJECT_NAME}/
-        )
