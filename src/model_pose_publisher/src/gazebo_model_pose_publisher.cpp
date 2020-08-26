@@ -60,14 +60,14 @@ namespace gazebo_plugins
         // ROS node
         impl_->ros_node_ = gazebo_ros::Node::Get(sdf);
         // Get QoS profiles
-        const gazebo_ros::QoS & qos = impl_->ros_node_->get_qos();
+        //const gazebo_ros::QoS & qos = impl_->ros_node_->get_qos();
         // Update rate
         double update_rate = 100.0;
         impl_->update_period_ = 1.0 / update_rate;
         impl_->last_update_time_ = model->GetWorld()->SimTime();
         // Entity state publisher
         impl_->entity_state_pub_ = impl_->ros_node_->create_publisher<geometry_msgs::msg::Point>(
-                "entity_state", qos.get_publisher_qos("entity_state", rclcpp::QoS(1000)));
+                model->GetName() + "_entity_state"); //, qos.get_publisher_qos(model->GetName() + "_entity_state", rclcpp::QoS(1000)));
         // Callback on every iteration
         impl_->update_connection_ = gazebo::event::Events::ConnectWorldUpdateBegin(
                 std::bind(&GazeboRosEntityStatePublisherPrivate::OnUpdate, impl_.get(), std::placeholders::_1));
@@ -77,7 +77,7 @@ namespace gazebo_plugins
     {
         auto pose = model->WorldPose();
         geometry_msgs::msg::Point msg;
-        entity_state_pub_->Publish(msg);
+        entity_state_pub_->publish(msg);
     }
 
     GZ_REGISTER_MODEL_PLUGIN(GazeboRosEntityStatePublisher)
