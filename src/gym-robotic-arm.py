@@ -31,7 +31,7 @@ class RoboticArm(gym.Env):
             shape=(480, 640, 3),
             dtype=np.uint8
         )
-
+        self.__first_episode = True
         self.target_obj1_pos = np.array([0.5, -0.5, 0.0]) # coke_can
         self.target_obj2_pos = np.array([-0.5, -0.5, 0.0]) # beer
 
@@ -45,10 +45,14 @@ class RoboticArm(gym.Env):
         """
         reset() called at the beginning of an episode, it returns an observation
         """
-        # delete coke_can and beer models
-        self.__delete()
-        # spawn them in the origin position
-        self.__spawn()
+        if self.__first_episode:
+            self.__spawn()
+            self.__first_episode = False
+        else:
+            # delete coke_can and beer models
+            self.__delete()
+            # spawn them in the origin position
+            self.__spawn()
         # set joint to default position
         action_cmd = [0., 0., 0., 0., 45., 0., 0.8]
         self.__publish_arm_cmds(action_cmd)
