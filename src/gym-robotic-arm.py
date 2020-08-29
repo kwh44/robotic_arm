@@ -38,6 +38,7 @@ class RoboticArm(gym.Env):
         rclpy.init(args=None)
         self.__start_video_feed()
         self.__start_arm_control()
+        self.__start_entity_state()
         self.__init_spawn()
         self.__init_delete()
 
