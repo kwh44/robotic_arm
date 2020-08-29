@@ -32,8 +32,8 @@ class RoboticArm(gym.Env):
             dtype=np.uint8
         )
         self.__first_episode = True
-        self.target_obj1_pos = np.array([0.5, -0.5, 0.0]) # coke_can
-        self.target_obj2_pos = np.array([-0.5, -0.5, 0.0]) # beer
+        self.target_obj1_pos = np.array([0.5, -0.5, 0.0])  # coke_can
+        self.target_obj2_pos = np.array([-0.5, -0.5, 0.0])  # beer
 
         rclpy.init(args=None)
         self.__start_video_feed()
@@ -68,13 +68,14 @@ class RoboticArm(gym.Env):
         self.__publish_arm_cmds(action)
         observation = self.__get_observation()
         # is episode complete
-        done = self.is_episode_over() == True
+        over = self.is_episode_over()
+        episode_done = True if over else False
         # reward
         # + 10 if beer is on the right side or coke is on left side from the arm
         reward = self.reward_function()
         # debugging information
         info = {}
-        return observation, reward, done, info
+        return observation, reward, episode_done, info
 
     def close(self):
         pass
@@ -225,10 +226,12 @@ class RoboticArm(gym.Env):
 
 
 from stable_baselines.common.env_checker import check_env
+
+
 def main():
     env = RoboticArm()
     check_env(env, warn=True)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     main()
