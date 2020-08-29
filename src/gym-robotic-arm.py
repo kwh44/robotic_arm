@@ -141,7 +141,8 @@ class RoboticArm(gym.Env):
 
     def __get_observation(self):
         # execute camera feed callback
-        rclpy.spin_once(self.camera_feed_node)
+        for i in range(3):
+            rclpy.spin_once(self.camera_feed_node)
         return self.last_observation
 
     def __publish_arm_cmds(self, action):
