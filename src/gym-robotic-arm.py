@@ -68,7 +68,7 @@ class RoboticArm(gym.Env):
         self.__publish_arm_cmds(action)
         observation = self.__get_observation()
         # is episode complete
-        done = self.is_episode_over()
+        done = self.is_episode_over() == True
         # reward
         # + 10 if beer is on the right side or coke is on left side from the arm
         reward = self.reward_function()
