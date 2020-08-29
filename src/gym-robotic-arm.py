@@ -148,12 +148,12 @@ class RoboticArm(gym.Env):
     def __publish_arm_cmds(self, action):
         # set joint angle
         for i in range(6):
-            self.arm_cmd_msgs[i].position = action[i] * 3.1416 / 180
+            self.arm_cmd_msgs[i].position = float(action[i]) * 3.1416 / 180
             # publish three times to the joint angle topic
             for i in range(3):
                 self.arm_cmd_nodes_pubs[i][1].publish(self.arm_cmd_msgs[i])
         # set gripper request
-        self.arm_cmd_msgs[-1].goal_angularposition = action[6]
+        self.arm_cmd_msgs[-1].goal_angularposition = float(action[6])
         while not self.arm_cmd_nodes_pubs[-1][1].wait_for_service(timeout_sec=1.0):
             continue
         goal_accepted = False
