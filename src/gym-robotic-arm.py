@@ -158,7 +158,7 @@ class RoboticArm(gym.Env):
         goal_accepted = False
         while not goal_accepted:
             gripper_future = self.arm_cmd_nodes_pubs[-1][1].call_async(self.arm_cmd_msgs[-1])
-            rclpy.spin_until_future_completes(self.arm_cmd_nodes_pubs[-1][0], gripper_future)
+            rclpy.spin_until_future_complete(self.arm_cmd_nodes_pubs[-1][0], gripper_future)
             if gripper_future.result() is not None:
                 if gripper_future.result().goal_accepted:
                     goal_accepted = True
