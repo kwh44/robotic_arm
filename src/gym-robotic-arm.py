@@ -220,3 +220,13 @@ class RoboticArm(gym.Env):
         self.sub_object_type_2 = self.object_type_2_node.create_subscription(Point, '/spawned_object/beer_entity_state',
                                                                              self.__object_type_2_callback,
                                                                              qos_profile=self._qos)
+
+
+from stable_baselines.common.env_checker import check_env
+def main():
+    env = RoboticArm()
+    check_env(env, warn=True)
+
+if __name__ == "__main__":
+
+    main()
