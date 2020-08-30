@@ -32,6 +32,7 @@ class RoboticArm(gym.Env):
             dtype=np.uint8
         )
         self.__first_episode = True
+        self.origin = np.array([0., 0., 0.])
         self.target_obj1_pos = np.array([0.5, -0.5, 0.0])  # coke_can
         self.target_obj2_pos = np.array([-0.5, -0.5, 0.0])  # beer
 
@@ -130,8 +131,12 @@ class RoboticArm(gym.Env):
     def is_episode_over(self):
         dist = 0.1
         obj1_pos, obj2_pos = self.__get_object_pos()
-        return self.__distance(obj1_pos, self.target_obj1_pos) < dist and self.__distance(obj2_pos,
-                                                                                          self.target_obj2_pos) < dist
+        cond = self.__distance(obj1_pos, self.target_obj1_pos) < dist
+        cond = cond and self.__distance(obj2_pos,self.target_obj2_pos) < dist
+        unreachable = 1.4
+        cond = cond or self.__distance(obj1_pos, self.origin) > unreachable
+        cond = cond or self.__distance(obj2_pos, self.origin) > unreachable
+        return cond
 
     def __distance(self, p1, p2):
         return np.sqrt(np.sum((p1 - p2) ** 2, axis=0))
