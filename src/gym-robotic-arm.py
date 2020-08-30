@@ -123,16 +123,17 @@ class RoboticArm(gym.Env):
 
     def reward_function(self):
         reward = 0.0
+        scale = 1000
         obj1_pos, obj2_pos = self.__get_object_pos()
-        reward += self.__distance(obj1_pos, self.target_obj1_pos)
-        reward += self.__distance(obj2_pos, self.target_obj2_pos)
+        reward -= scale * self.__distance(obj1_pos, self.target_obj1_pos)
+        reward -= scale * self.__distance(obj2_pos, self.target_obj2_pos)
         return reward
 
     def is_episode_over(self):
         dist = 0.1
         obj1_pos, obj2_pos = self.__get_object_pos()
         cond = self.__distance(obj1_pos, self.target_obj1_pos) < dist
-        cond = cond and self.__distance(obj2_pos,self.target_obj2_pos) < dist
+        cond = cond and self.__distance(obj2_pos, self.target_obj2_pos) < dist
         unreachable = 1.4
         cond = cond or self.__distance(obj1_pos, self.origin) > unreachable
         cond = cond or self.__distance(obj2_pos, self.origin) > unreachable
@@ -230,13 +231,8 @@ class RoboticArm(gym.Env):
                                                                              qos_profile=self._qos)
 
 
-from stable_baselines.common.env_checker import check_env
+if __name__ == "__main__":
+    from stable_baselines.common.env_checker import check_env
 
-
-def main():
     env = RoboticArm()
     check_env(env, warn=True)
-
-
-if __name__ == "__main__":
-    main()
