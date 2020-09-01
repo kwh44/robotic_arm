@@ -14,6 +14,5 @@ docker run -it --rm \
     --env="DISPLAY=$DISPLAY" \
     --env QT_X11_NO_MITSHM=1 \
     ucu_mara
-    #kwh44/mara:latest
 
 xhost -local:root

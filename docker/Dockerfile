@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get install -y \
 	python3-pip python3-vcstool python3-numpy wget python3-pyqt5 python3-colcon-common-extensions git
-
+RUN apt-get update && apt-get install -y python3-opencv cmake libopenmpi-dev python3-dev zlib1g-dev
 
 RUN mkdir -p ~/ros2_mara_ws/src && cd ~/ros2_mara_ws  && \    
     wget https://raw.githubusercontent.com/acutronicrobotics/MARA/dashing/mara-ros2.repos && \
