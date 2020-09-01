@@ -22,8 +22,8 @@ class RoboticArm(gym.Env):
 
         super(RoboticArm, self).__init__()
         # 6 joint angles and gripper angular position
-        self.action_space = spaces.Box(low=np.array([-145.0, -180.0, -145.0, -90.0, -120.0, -90.0, 0.0]),
-                                       high=np.array([145.0, 180.0, 145.0, 90.0, 120.0, 90.0, 0.87]), dtype=np.float32)
+        self.action_space = spaces.Box(low=np.array([-1.45, -1.8, -1.45, -.9, -1.2, -.9, 0.0]),
+                                       high=np.array([1.45, 1.8, 1.45, 0.9, 1.2, .9, 0.87]), dtype=np.float32)
         # image from realsense camera 640x480
         self.observation_space = spaces.Box(
             low=0,
@@ -32,7 +32,6 @@ class RoboticArm(gym.Env):
             dtype=np.uint8
         )
         self.__first_episode = True
-        self._step_count = 0
         self.origin = np.array([0., 0., 0.])
         self.target_obj1_pos = np.array([0.5, -0.5, 0.0])  # coke_can
         self.target_obj2_pos = np.array([-0.5, -0.5, 0.0])  # beer
@@ -67,7 +66,7 @@ class RoboticArm(gym.Env):
         the immediate reward, whether the episode is over and additional information
         """
         # take action and get observation
-        self._step_count += 1
+
         self.__publish_arm_cmds(action)
         observation = self.__get_observation()
         # is episode complete
@@ -139,7 +138,7 @@ class RoboticArm(gym.Env):
         unreachable = 1.4
         cond = cond or self.__distance(obj1_pos, self.origin) > unreachable
         cond = cond or self.__distance(obj2_pos, self.origin) > unreachable
-        cond = cond or self._step_count > 50
+
         return cond
 
     def __distance(self, p1, p2):
@@ -159,9 +158,9 @@ class RoboticArm(gym.Env):
     def __publish_arm_cmds(self, action):
         # set joint angle
         for i in range(6):
-            self.arm_cmd_msgs[i].position = float(action[i]) * 3.1416 / 180
+            self.arm_cmd_msgs[i].position = 100 * float(action[i]) * 3.1416 / 180
             # publish five times to the joint angle topic
-            for j in range(25):
+            for j in range(5):
                 self.arm_cmd_nodes_pubs[i][1].publish(self.arm_cmd_msgs[i])
         # set gripper request
         self.arm_cmd_msgs[-1].goal_angularposition = float(action[6])
