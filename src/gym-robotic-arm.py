@@ -161,7 +161,7 @@ class RoboticArm(gym.Env):
         for i in range(6):
             self.arm_cmd_msgs[i].position = float(action[i]) * 3.1416 / 180
             # publish five times to the joint angle topic
-            for i in range(5):
+            for j in range(25):
                 self.arm_cmd_nodes_pubs[i][1].publish(self.arm_cmd_msgs[i])
         # set gripper request
         self.arm_cmd_msgs[-1].goal_angularposition = float(action[6])
@@ -237,9 +237,9 @@ class RoboticArm(gym.Env):
 if __name__ == "__main__":
 
     from stable_baselines.common.policies import MlpPolicy
-    from stable_baselines import PPO2
+    from stable_baselines import PPO2, A2C
 
     env = RoboticArm()
-    model = PPO2(MlpPolicy, env, verbose=1)
+    model = A2C(MlpPolicy, env, verbose=1)
     model.learn(total_timesteps=25000)
     model.save("ppo2_robotic_arm")

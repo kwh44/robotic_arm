@@ -1,0 +1,4 @@
+gym
+scikit-build
+stable-baselines[mpi]
+tensorflow
