@@ -236,8 +236,7 @@ class RoboticArm(gym.Env):
 
 if __name__ == "__main__":
 
-    from stable_baselines.common.policies import MlpPolicy, CnnPolicy
-    from stable_baselines.common import make_vec_env
+    from stable_baselines.common.policies import MlpPolicy
     from stable_baselines import PPO2
 
     env = RoboticArm()
