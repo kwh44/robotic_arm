@@ -32,6 +32,7 @@ class RoboticArm(gym.Env):
             dtype=np.uint8
         )
         self.__first_episode = True
+        self._step_count = 0
         self.origin = np.array([0., 0., 0.])
         self.target_obj1_pos = np.array([0.5, -0.5, 0.0])  # coke_can
         self.target_obj2_pos = np.array([-0.5, -0.5, 0.0])  # beer
@@ -66,6 +67,7 @@ class RoboticArm(gym.Env):
         the immediate reward, whether the episode is over and additional information
         """
         # take action and get observation
+        self._step_count += 1
         self.__publish_arm_cmds(action)
         observation = self.__get_observation()
         # is episode complete
@@ -137,6 +139,7 @@ class RoboticArm(gym.Env):
         unreachable = 1.4
         cond = cond or self.__distance(obj1_pos, self.origin) > unreachable
         cond = cond or self.__distance(obj2_pos, self.origin) > unreachable
+        cond = cond or self._step_count > 50
         return cond
 
     def __distance(self, p1, p2):
@@ -157,8 +160,8 @@ class RoboticArm(gym.Env):
         # set joint angle
         for i in range(6):
             self.arm_cmd_msgs[i].position = float(action[i]) * 3.1416 / 180
-            # publish three times to the joint angle topic
-            for i in range(3):
+            # publish five times to the joint angle topic
+            for i in range(5):
                 self.arm_cmd_nodes_pubs[i][1].publish(self.arm_cmd_msgs[i])
         # set gripper request
         self.arm_cmd_msgs[-1].goal_angularposition = float(action[6])
@@ -232,7 +235,12 @@ class RoboticArm(gym.Env):
 
 
 if __name__ == "__main__":
-    from stable_baselines.common.env_checker import check_env
+
+    from stable_baselines.common.policies import MlpPolicy, CnnPolicy
+    from stable_baselines.common import make_vec_env
+    from stable_baselines import PPO2
 
     env = RoboticArm()
-    check_env(env, warn=True)
+    model = PPO2(MlpPolicy, env, verbose=1)
+    model.learn(total_timesteps=25000)
+    model.save("ppo2_robotic_arm")
