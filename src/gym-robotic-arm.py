@@ -22,8 +22,8 @@ class RoboticArm(gym.Env):
 
         super(RoboticArm, self).__init__()
         # 6 joint angles and gripper angular position
-        self.action_space = spaces.Box(low=np.array([-1.45, -1.8, -1.45, -.9, -1.2, -.9, 0.0]),
-                                       high=np.array([1.45, 1.8, 1.45, 0.9, 1.2, .9, 0.87]), dtype=np.float32)
+        self.action_space = spaces.Box(low=np.array([-.9, -.9, -.9, -.4, -.5, -.4, 0.0]),
+                                       high=np.array([.9, .9, .9, 0.4, .5, .4, 0.87]), dtype=np.float32)
         # image from realsense camera 640x480
         self.observation_space = spaces.Box(
             low=0,
@@ -56,7 +56,7 @@ class RoboticArm(gym.Env):
             # spawn them in the origin position
             self.__spawn()
         # set joint to default position
-        action_cmd = [0., 0., 0., 0., 45., 0., 0.8]
+        action_cmd = [0., 0., 0., 0., 0.45, 0., 0.8]
         self.__publish_arm_cmds(action_cmd)
         return self.__get_observation()
 
@@ -241,4 +241,4 @@ if __name__ == "__main__":
     env = RoboticArm()
     model = A2C(MlpPolicy, env, verbose=1)
     model.learn(total_timesteps=25000)
-    model.save("ppo2_robotic_arm")
+    model.save("a2c_robotic_arm")
