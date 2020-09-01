@@ -66,7 +66,7 @@ class RoboticArm(gym.Env):
         the immediate reward, whether the episode is over and additional information
         """
         # take action and get observation
-
+        print("Action: ", action)
         self.__publish_arm_cmds(action)
         observation = self.__get_observation()
         # is episode complete
@@ -77,6 +77,7 @@ class RoboticArm(gym.Env):
         reward = self.reward_function()
         # debugging information
         info = {}
+        print("Action done")
         return observation, reward, episode_done, info
 
     def close(self):
@@ -138,7 +139,6 @@ class RoboticArm(gym.Env):
         unreachable = 1.4
         cond = cond or self.__distance(obj1_pos, self.origin) > unreachable
         cond = cond or self.__distance(obj2_pos, self.origin) > unreachable
-
         return cond
 
     def __distance(self, p1, p2):
