@@ -23,5 +23,5 @@ ros2 launch mara_gazebo mara.launch.py --urdf mara_robot_gripper_140_camera_trai
 ```
 ###### Train RL agent
 ```shell script
-python3 robotic_arm/src/gym-robotic-arm.py 
+python3 robotic_arm/src/gym_robotic-arm.py 
 ```
