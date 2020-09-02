@@ -14,7 +14,7 @@ docker run -it \
     --device=/dev/dri:/dev/dri \
     --env="DISPLAY=$DISPLAY" \
     --env QT_X11_NO_MITSHM=1 \
-    kwh44/mara_robotic_arm:1.0
+    kwh44/mara_robotic_arm:latest
 ```
 ##### Inside docker container
 ###### Start Gazebo simulator
