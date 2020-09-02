@@ -23,7 +23,7 @@ class RoboticArm(gym.Env):
         super(RoboticArm, self).__init__()
         # 6 joint angles and gripper angular position
         self.action_space = spaces.Box(low=np.array([-.9, -.9, -.9, -.4, -.5, -.4, 0.0]),
-                                       high=np.array([.9, .9, .9, 0.4, .5, .4, 0.87]), dtype=np.float32)
+                                       high=np.array([.9, .9, .9, 0.4, .5, .4, 0.78]), dtype=np.float32)
         # image from realsense camera 640x480
         self.observation_space = spaces.Box(
             low=0,
@@ -211,7 +211,7 @@ class RoboticArm(gym.Env):
 
         # declare gripper service request
         req = ControlFinger.Request()
-        req.goal_velocity = 99999.
+        req.goal_velocity = 250.
         req.goal_angularposition = 0.0
         self.arm_cmd_msgs.append(req)
 
@@ -234,7 +234,6 @@ class RoboticArm(gym.Env):
 
 
 if __name__ == "__main__":
-
     from stable_baselines.common.policies import MlpPolicy
     from stable_baselines import PPO2, A2C
 
